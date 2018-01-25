@@ -1,4 +1,4 @@
-# june
+# June-py
 Python client for June
 
 ## Installation
