@@ -204,7 +204,6 @@ class June:
         devices = self.get_devices(contract_id=contract_id)
         for device in devices['data']:
             if device['id'] == device_id:
-                print(device)
                 start = dateutil.parser.parse(device['attributes']['created_at'])
                 end = dateutil.parser.parse(device['attributes']['last_image_date'])
                 return start, end
