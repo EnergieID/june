@@ -10,7 +10,7 @@ import pytz
 import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
@@ -164,6 +164,9 @@ class June:
         df = pd.DataFrame.from_records(datapoints)
         df.start = pd.DatetimeIndex(df.start)
         df = df.set_index('start')
+        # cast the numerical columns to float
+        for column in df.columns ^ {'filled', 'last_image', 'period'}:
+            df[column] = df[column].astype(float)
         return df
 
     @staticmethod
