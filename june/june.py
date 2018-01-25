@@ -9,6 +9,11 @@ import datetime as dt
 import pytz
 import dateutil.parser
 
+__title__ = "june"
+__version__ = "0.1.0"
+__author__ = "EnergieID.be"
+__license__ = "MIT"
+
 URL = 'https://api-portal.june.energy/'
 
 
