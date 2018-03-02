@@ -164,6 +164,7 @@ class June:
         df = pd.DataFrame.from_records(datapoints)
         df.start = pd.DatetimeIndex(df.start)
         df = df.set_index('start')
+        df = df.tz_localize('UTC')
         # cast the numerical columns to float
         for column in df.columns ^ {'filled', 'last_image', 'period'}:
             df[column] = df[column].astype(float)
