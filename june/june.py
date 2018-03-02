@@ -4,13 +4,13 @@ https://documenter.getpostman.com/view/2978056/june-api-doc/71FUpcH
 """
 
 import requests
-from functools import wraps
+import functools
 import datetime as dt
 import pytz
 import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
@@ -26,7 +26,7 @@ def authenticated(func):
     Decorator to check if your access token is set.
     If it isn't, throw an error
     """
-    @wraps(func)
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
         self = args[0]
         if not self.access_token:
@@ -62,6 +62,7 @@ class June:
         j = r.json()
         self.access_token = j['access_token']
 
+    @functools.lru_cache(maxsize=128, typed=False)
     @authenticated
     def get_contracts(self):
         """
@@ -89,6 +90,7 @@ class June:
         ids = [contract['id'] for contract in contracts['data']]
         return ids
 
+    @functools.lru_cache(maxsize=128, typed=False)
     @authenticated
     def get_devices(self, contract_id):
         """
@@ -108,6 +110,7 @@ class June:
         r.raise_for_status()
         return r.json()
 
+    @functools.lru_cache(maxsize=128, typed=False)
     @authenticated
     def get_measurements(self, device_id, period, start, end):
         """
