@@ -10,7 +10,7 @@ import pytz
 import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
