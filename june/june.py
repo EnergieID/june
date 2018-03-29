@@ -10,7 +10,7 @@ import pytz
 import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
@@ -64,47 +64,47 @@ class June:
 
     @functools.lru_cache(maxsize=128, typed=False)
     @authenticated
-    def get_contracts(self):
+    def get_clients(self):
         """
-        Request contracts from API
+        Request cllients from API
 
         Returns
         -------
         dict
         """
-        contract_url = URL + 'contracts'
+        client_url = URL + 'clients'
         headers = {"Authorization": "Bearer {}".format(self.access_token)}
-        r = requests.get(contract_url, headers=headers)
+        r = requests.get(client_url, headers=headers)
         r.raise_for_status()
         return r.json()
 
-    def get_contract_ids(self):
+    def get_client_ids(self):
         """
-        Get a list of all contract ids
+        Get a list of all client ids
 
         Returns
         -------
         [int]
         """
-        contracts = self.get_contracts()
-        ids = [contract['id'] for contract in contracts['data']]
+        clients = self.get_clients()
+        ids = [contract['id'] for contract in clients['data']]
         return ids
 
     @functools.lru_cache(maxsize=128, typed=False)
     @authenticated
-    def get_devices(self, contract_id):
+    def get_devices(self, client_id):
         """
         Request devices from API
 
         Parameters
         ----------
-        contract_id : int
+        client_id : int
 
         Returns
         -------
         dict
         """
-        devices_url = URL + 'contracts/{}/devices'.format(contract_id)
+        devices_url = URL + 'contracts/{}/devices'.format(client_id)
         headers = {"Authorization": "Bearer {}".format(self.access_token)}
         r = requests.get(devices_url, headers=headers)
         r.raise_for_status()
@@ -200,20 +200,20 @@ class June:
 
         return date_obj.strftime(fmt)
 
-    def get_start_end(self, contract_id, device_id):
+    def get_start_end(self, client_id, device_id):
         """
         Get the start and end time of the available data for a device
 
         Parameters
         ----------
-        contract_id : int
+        client_id : int
         device_id : int
 
         Returns
         -------
         dt.datetime, dt.datetime
         """
-        devices = self.get_devices(contract_id=contract_id)
+        devices = self.get_devices(client_id=client_id)
         for device in devices['data']:
             if device['id'] == device_id:
                 start = dateutil.parser.parse(device['attributes']['created_at'])
