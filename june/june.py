@@ -87,7 +87,7 @@ class June:
         [int]
         """
         clients = self.get_clients()
-        ids = [contract['id'] for contract in clients['data']]
+        ids = [client['id'] for client in clients['data']]
         return ids
 
     @functools.lru_cache(maxsize=128, typed=False)
