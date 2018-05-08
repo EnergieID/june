@@ -10,7 +10,7 @@ import pytz
 import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
@@ -164,8 +164,10 @@ class June:
         import pandas as pd
         measurements = self.get_measurements(device_id=device_id, period=period, start=start, end=end)
         datapoints = [point['attributes'] for point in measurements['data']]
+        if len(datapoints) == 0:
+            return pd.DataFrame()
         df = pd.DataFrame.from_records(datapoints)
-        df.start = pd.DatetimeIndex(df.start)
+        df['start'] = pd.DatetimeIndex(df['start'])
         df = df.set_index('start')
         df = df.tz_localize('UTC')
         # cast the numerical columns to float
