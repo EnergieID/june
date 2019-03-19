@@ -10,7 +10,7 @@ import pytz
 import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
@@ -167,12 +167,9 @@ class June:
         if len(datapoints) == 0:
             return pd.DataFrame()
         df = pd.DataFrame.from_records(datapoints)
+        df['start'] = pd.to_datetime(df['start'], utc=True)
         df['start'] = pd.DatetimeIndex(df['start'])
-        df = df.set_index('start')
-        try:
-            df = df.tz_localize('UTC')
-        except TypeError:
-            df = df.tz_convert('UTC')
+        df.set_index('start', inplace=True)
         # cast the numerical columns to float
         for column in df.columns ^ {'filled', 'last_image', 'period'}:
             df[column] = df[column].astype(float)
