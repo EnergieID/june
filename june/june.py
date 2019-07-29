@@ -10,11 +10,11 @@ import pytz
 import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.7"
+__version__ = "0.1.8"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
-URL = 'https://api-portal.june.energy/'
+URL = 'https://core.june.energy/rest/'
 
 
 class NotAuthenticatedError(Exception):
@@ -36,13 +36,10 @@ def authenticated(func):
 
 
 class June:
-    def __init__(self, access_token=None):
-        """
-        Parameters
-        ----------
-        access_token : str
-        """
-        self.access_token = access_token
+    def __init__(self, client_id: str=None, client_secret: str=None):
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.access_token: str = None
 
     def authenticate(self, username, password):
         """
@@ -55,7 +52,9 @@ class June:
         data = {
             "grant_type": "password",
             "username": username,
-            "password": password
+            "password": password,
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
         }
         r = requests.post(auth_url, data)
         r.raise_for_status()
@@ -223,3 +222,8 @@ class June:
                 return start, end
         else:
             return None, None
+
+class SimpleJune(June):
+    def __init__(self, access_token: str):
+        super(SimpleJune, self).__init__(client_id=None, client_secret=None)
+        self.access_token = access_token

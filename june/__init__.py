@@ -1,1 +1,1 @@
-from .june import June, __version__
+from .june import June, SimpleJune, __version__
