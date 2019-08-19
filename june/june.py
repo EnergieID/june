@@ -7,10 +7,9 @@ import requests
 import functools
 import datetime as dt
 import pytz
-import dateutil.parser
 
 __title__ = "june"
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
@@ -217,8 +216,8 @@ class June:
         devices = self.get_devices(client_id=client_id)
         for device in devices['data']:
             if device['id'] == device_id:
-                start = dateutil.parser.parse(device['attributes']['created_at'])
-                end = dateutil.parser.parse(device['attributes']['last_image_date'])
+                start = dt.datetime.fromtimestamp(device['attributes']['created_at'] // 1000, pytz.UTC)
+                end = dt.datetime.fromtimestamp(device['attributes']['last_image_date'] // 1000, pytz.UTC)
                 return start, end
         else:
             return None, None
