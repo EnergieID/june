@@ -9,7 +9,7 @@ import datetime as dt
 import pytz
 
 __title__ = "june"
-__version__ = "0.1.9"
+__version__ = "0.1.10"
 __author__ = "EnergieID.be"
 __license__ = "MIT"
 
@@ -217,7 +217,11 @@ class June:
         for device in devices['data']:
             if device['id'] == device_id:
                 start = dt.datetime.fromtimestamp(device['attributes']['created_at'] // 1000, pytz.UTC)
-                end = dt.datetime.fromtimestamp(device['attributes']['last_image_date'] // 1000, pytz.UTC)
+                last_image_date = device['attributes']['last_image_date']
+                if last_image_date is not None:
+                    end = dt.datetime.fromtimestamp(last_image_date // 1000, pytz.UTC)
+                else:
+                    end = None
                 return start, end
         else:
             return None, None
